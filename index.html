@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1565C0" />
+  <title>Levantamento de Equipamentos - Proteção Civil de Santo Tirso</title>
+  <link rel="icon" href="assets/assets/images/logo.b7994b6f484afa3395ed78beb11a89d7.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <img src="assets/assets/images/logo.b7994b6f484afa3395ed78beb11a89d7.png" alt="Logo Proteção Civil" class="header-logo" />
+        <div class="header-text">
+          <h1 class="header-title">Levantamento de Equipamentos</h1>
+          <p class="header-subtitle">Proteção Civil de Santo Tirso</p>
+        </div>
+        <button class="theme-toggle" id="themeToggle" title="Alternar tema">
+          <span class="material-icons-round">dark_mode</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Tab Navigation -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="survey" id="tabSurvey">
+        <span class="material-icons-round">home</span>
+        <span>Levantamento</span>
+      </button>
+      <button class="tab-btn" data-tab="history" id="tabHistory">
+        <span class="material-icons-round">history</span>
+        <span>Histórico</span>
+        <span class="badge" id="historyBadge" style="display:none">0</span>
+      </button>
+    </nav>
+
+    <!-- Survey Tab -->
+    <main class="tab-content active" id="tabSurveyContent">
+      <!-- Location Input -->
+      <section class="card location-card">
+        <div class="card-header">
+          <span class="material-icons-round card-icon">location_on</span>
+          <h2 class="card-title">Identificação da Instalação</h2>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label class="form-label" for="locationInput">
+              Nome da Instalação <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="locationInput"
+              class="form-input"
+              placeholder="Ex: Edifício Principal, Sala de Servidores"
+              maxlength="100"
+            />
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label" for="referenceInput">
+              Referência / ID
+            </label>
+            <input
+              type="text"
+              id="referenceInput"
+              class="form-input"
+              placeholder="Ex: REF-001"
+              maxlength="50"
+            />
+        </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label" for="technicianInput">
+              Técnico Responsável
+            </label>
+            <input
+              type="text"
+              id="technicianInput"
+              class="form-input"
+              placeholder="Nome do técnico"
+              maxlength="100"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Bar -->
+      <section class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-value" id="statTotal">0</span>
+          <span class="stat-label">Total Equipamentos</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-value" id="statPhotos">0</span>
+          <span class="stat-label">Fotos</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-value" id="statTypes">0</span>
+          <span class="stat-label">Tipos Contados</span>
+        </div>
+      </section>
+
+      <!-- Equipment Section -->
+      <section class="card equipment-card">
+        <div class="card-header">
+          <span class="material-icons-round card-icon">fire_extinguisher</span>
+          <h2 class="card-title">Equipamentos</h2>
+          <button class="btn-icon btn-reset" id="resetCounters" title="Repor contadores">
+            <span class="material-icons-round">restart_alt</span>
+          </button>
+        </div>
+
+        <!-- Equipment Categories -->
+        <div class="equipment-category">
+          <h3 class="category-title">
+            <span class="material-icons-round">local_fire_department</span>
+            Extintores
+          </h3>
+          <div class="equipment-grid" id="extintoresGrid">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+        <div class="equipment-category">
+          <h3 class="category-title">
+            <span class="material-icons-round">water_damage</span>
+            Bocas de Incêndio
+          </h3>
+          <div class="equipment-grid" id="bocasGrid">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+        <div class="equipment-category">
+          <h3 class="category-title">
+            <span class="material-icons-round">sensors</span>
+            Deteção e Alarme
+          </h3>
+          <div class="equipment-grid" id="detecaoGrid">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+        <div class="equipment-category">
+          <h3 class="category-title">
+            <span class="material-icons-round">door_front</span>
+            Compartimentação e Controlo
+          </h3>
+          <div class="equipment-grid" id="compartimentacaoGrid">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Undo Bar -->
+      <div class="undo-bar" id="undoBar" style="display:none">
+        <span class="material-icons-round">info</span>
+        <span id="undoMessage">Ação registada</span>
+        <button class="btn-undo" id="undoBtn">
+          <span class="material-icons-round">undo</span>
+          Desfazer
+        </button>
+      </div>
+
+      <!-- Action Buttons -->
+      <section class="action-section">
+        <div class="action-row">
+          <button class="btn btn-secondary btn-photos" id="btnPhotos">
+            <span class="material-icons-round">photo_camera</span>
+            <span>Fotos (<span id="photoCount">0</span>)</span>
+          </button>
+          <button class="btn btn-secondary btn-notes" id="btnNotes">
+            <span class="material-icons-round">edit_note</span>
+            <span>Notas</span>
+            <span class="dot-indicator" id="notesDot" style="display:none"></span>
+          </button>
+        </div>
+        <button class="btn btn-success btn-save" id="btnSave">
+          <span class="material-icons-round">save</span>
+          Guardar Levantamento
+        </button>
+      </section>
+    </main>
+
+    <!-- History Tab -->
+    <main class="tab-content" id="tabHistoryContent">
+      <section class="history-header">
+        <div class="history-search-row">
+          <div class="search-box">
+            <span class="material-icons-round search-icon">search</span>
+            <input
+              type="text"
+              id="historySearch"
+              class="search-input"
+              placeholder="Pesquisar por local ou referência..."
+            />
+          </div>
+          <button class="btn btn-primary btn-export" id="btnExport">
+            <span class="material-icons-round">download</span>
+            Exportar ZIP
+          </button>
+        </div>
+        <div class="history-stats" id="historyStats">
+          <span id="historyCount">0 levantamentos guardados</span>
+        </div>
+      </section>
+
+      <div class="history-list" id="historyList">
+        <!-- Filled by JS -->
+      </div>
+
+      <div class="empty-state" id="emptyHistory">
+        <span class="material-icons-round empty-icon">history</span>
+        <h3>Nenhum levantamento guardado</h3>
+        <p>Comece um novo levantamento no separador principal</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Photos Modal -->
+  <div class="modal-overlay" id="photosModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <span class="material-icons-round">photo_library</span>
+          Fotos Capturadas
+        </h3>
+        <button class="btn-icon modal-close" id="photosModalClose">
+          <span class="material-icons-round">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="photos-grid" id="photosGrid">
+          <!-- Filled by JS -->
+        </div>
+        <div class="empty-state small" id="emptyPhotos">
+          <span class="material-icons-round empty-icon">add_photo_alternate</span>
+          <p>Nenhuma foto adicionada</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <label class="btn btn-primary" for="photoInput">
+          <span class="material-icons-round">add_photo_alternate</span>
+          Adicionar Foto
+        </label>
+        <input type="file" id="photoInput" accept="image/*" multiple style="display:none" />
+        <button class="btn btn-outline" id="photosModalDone">Concluído</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes Modal -->
+  <div class="modal-overlay" id="notesModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <span class="material-icons-round">edit_note</span>
+          Notas do Levantamento
+        </h3>
+        <button class="btn-icon modal-close" id="notesModalClose">
+          <span class="material-icons-round">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <textarea
+          id="notesTextarea"
+          class="notes-textarea"
+          placeholder="Adicione observações, anomalias ou informações relevantes sobre o levantamento..."
+          rows="8"
+        ></textarea>
+        <div class="notes-char-count">
+          <span id="notesCharCount">0</span> / 1000 caracteres
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="notesModalClose2">Cancelar</button>
+        <button class="btn btn-primary" id="notesSave">
+          <span class="material-icons-round">save</span>
+          Guardar Notas
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Modal -->
+  <div class="modal-overlay" id="saveModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <span class="material-icons-round">save</span>
+          Confirmar Levantamento
+        </h3>
+        <button class="btn-icon modal-close" id="saveModalClose">
+          <span class="material-icons-round">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="save-summary" id="saveSummary">
+          <!-- Filled by JS -->
+        </div>
+        <div class="form-group mt-3">
+          <label class="form-label" for="saveLocationInput">Nome do Local <span class="required">*</span></label>
+          <input type="text" id="saveLocationInput" class="form-input" placeholder="Nome da instalação" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="saveReferenceInput">Referência / ID (Opcional)</label>
+          <input type="text" id="saveReferenceInput" class="form-input" placeholder="Ex: REF-001" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="saveModalCancel">Cancelar</button>
+        <button class="btn btn-success" id="saveConfirm">
+          <span class="material-icons-round">check_circle</span>
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Survey Modal -->
+  <div class="modal-overlay" id="viewModal">
+    <div class="modal modal-large">
+      <div class="modal-header">
+        <h3 class="modal-title" id="viewModalTitle">
+          <span class="material-icons-round">visibility</span>
+          Detalhes do Levantamento
+        </h3>
+        <button class="btn-icon modal-close" id="viewModalClose">
+          <span class="material-icons-round">close</span>
+        </button>
+      </div>
+      <div class="modal-body" id="viewModalBody">
+        <!-- Filled by JS -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" id="viewModalDelete">
+          <span class="material-icons-round">delete</span>
+          Eliminar
+        </button>
+        <button class="btn btn-secondary" id="viewModalEdit">
+          <span class="material-icons-round">edit</span>
+          Editar
+        </button>
+        <button class="btn btn-outline" id="viewModalClose2">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <span class="material-icons-round toast-icon" id="toastIcon">check_circle</span>
+    <span id="toastMessage">Mensagem</span>
+  </div>
+
+  <!-- Confirm Dialog -->
+  <div class="modal-overlay" id="confirmDialog">
+    <div class="modal modal-small">
+      <div class="modal-header">
+        <h3 class="modal-title" id="confirmTitle">Confirmar</h3>
+      </div>
+      <div class="modal-body">
+        <p id="confirmMessage">Tem a certeza?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="confirmCancel">Cancelar</button>
+        <button class="btn btn-danger" id="confirmOk">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
